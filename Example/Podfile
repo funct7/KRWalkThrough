@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'KRWalkThrough_Example' do
+  pod 'KRWalkThrough', :path => '../'
+
+  target 'KRWalkThrough_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
