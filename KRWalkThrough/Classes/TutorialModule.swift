@@ -55,8 +55,8 @@ public class TutorialView: UIView {
     private var cornerRadius: CGFloat?
     
     public func makeAvailable(view: UIView) {
-        let frame = self.convertRect(view.frame, fromView: view.superview)
-        self.makeAvailable(frame, maskRect: frame, cornerRadius: 0.0)
+        let frame = convertRect(view.frame, fromView: view.superview)
+        makeAvailable(frame, maskRect: frame, cornerRadius: 0.0)
     }
     
     //: Makes a circle-shaped available area with the given radius inset
@@ -65,23 +65,38 @@ public class TutorialView: UIView {
             view.superview?.layoutIfNeeded()
         }
         
-        let frame = self.convertRect(view.frame, fromView: view.superview)
-        let center = self.convertPoint(view.center, fromView: view.superview)
+        let rect = convertRect(view.frame, fromView: view.superview)
+        let center = convertPoint(view.center, fromView: view.superview)
         let rawDiameter = sqrt(pow(view.frame.width, 2) + pow(view.frame.height, 2))
         let diameter = round(rawDiameter) + radiusInset * 2.0
         
         let x = center.x - diameter / 2.0
         let y = center.y - diameter / 2.0
         
-        self.makeAvailable(frame, maskRect: CGRectMake(x, y, diameter, diameter), cornerRadius: diameter/2.0)
+        makeAvailable(rect, maskRect: CGRectMake(x, y, diameter, diameter), cornerRadius: diameter/2.0)
+    }
+    
+    public func makeAvailable(view: UIView, insets: UIEdgeInsets, cornerRadius: CGFloat) {
+        if !view.translatesAutoresizingMaskIntoConstraints {
+            view.superview?.layoutIfNeeded()
+        }
+        
+        let rect = convertRect(view.frame, fromView: view.superview)
+        var maskRect = rect
+        maskRect.origin.x -= insets.left
+        maskRect.origin.y -= insets.top
+        maskRect.size.width += insets.left + insets.right
+        maskRect.size.height += insets.top + insets.bottom
+        
+        makeAvailable(rect, maskRect: maskRect, cornerRadius: cornerRadius)
     }
     
     public func makeAvailable(rect: CGRect, cornerRadius: CGFloat) {
-        self.makeAvailable(rect, maskRect: rect, cornerRadius: cornerRadius)
+        makeAvailable(rect, maskRect: rect, cornerRadius: cornerRadius)
     }
     
     public func makeAvailable(rect: CGRect, maskRect: CGRect, cornerRadius: CGFloat) {
-        self.touchArea = rect
+        touchArea = rect
         self.maskRect = maskRect
         self.cornerRadius = cornerRadius
     }
@@ -95,7 +110,7 @@ public class TutorialView: UIView {
             }
         }
         
-        let path = UIBezierPath(rect: self.bounds)
+        let path = UIBezierPath(rect: bounds)
         if let maskRect = maskRect, let cornerRadius = cornerRadius {
             path.appendPath(UIBezierPath(roundedRect: maskRect, cornerRadius: cornerRadius))
         }
@@ -103,7 +118,7 @@ public class TutorialView: UIView {
         let backgroundLayer = CAShapeLayer()
         backgroundLayer.fillColor = fillColor.CGColor
         backgroundLayer.fillRule = kCAFillRuleEvenOdd
-        backgroundLayer.frame = self.bounds
+        backgroundLayer.frame = bounds
         backgroundLayer.name = "TutorialView.backgroundLayer"
         backgroundLayer.path = path.CGPath
         
@@ -111,7 +126,7 @@ public class TutorialView: UIView {
     }
     
     public override func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView? {
-        if let touchArea = self.touchArea where CGRectContainsPoint(touchArea, point) {
+        if let touchArea = touchArea where CGRectContainsPoint(touchArea, point) {
             return nil
         }
         return super.hitTest(point, withEvent: event)
@@ -135,7 +150,7 @@ public class TutorialItem: NSObject {
         self.view = view
         self.tutorialID = identifier
         super.init()
-        self.prepareView()
+        prepareView()
     }
     
     public init(nibName: String, identifier: String) {
@@ -143,23 +158,23 @@ public class TutorialItem: NSObject {
         self.view = NSBundle.mainBundle().loadNibNamed(nibName, owner: nil, options: nil)[0] as! TutorialView
         self.tutorialID = identifier
         super.init()
-        self.prepareView()
+        prepareView()
     }
     
     private func prepareView() {
-        self.view.item = self
+        view.item = self
         
-        if let prevButton = self.view.prevButton {
+        if let prevButton = view.prevButton {
             prevButton.addTarget(self, action: #selector(prevButtonAction), forControlEvents: .TouchUpInside)
         }
         
-        if let nextButton = self.view.nextButton {
+        if let nextButton = view.nextButton {
             nextButton.addTarget(self, action: #selector(nextButtonAction), forControlEvents: .TouchUpInside)
         }
     }
     
     @objc private func prevButtonAction(sender: AnyObject) {
-        if let prevAction = self.prevAction {
+        if let prevAction = prevAction {
             prevAction()
         } else {
             print("ERROR: \(TutorialItem.self) line #\(#line) - \(#function)\n** Reason: No action has been set.")
@@ -167,7 +182,7 @@ public class TutorialItem: NSObject {
     }
     
     @objc private func nextButtonAction(sender: AnyObject) {
-        if let nextAction = self.nextAction {
+        if let nextAction = nextAction {
             nextAction()
         } else {
             print("ERROR: \(TutorialItem.self) line #\(#line) - \(#function)\n** Reason: No action has been set.")
@@ -188,29 +203,36 @@ public class TutorialManager: NSObject {
     public private(set) var currentItem: TutorialItem?
     
     private let blankItem: TutorialItem
+    private let transparentItem: TutorialItem
     
     private override init() {
-        let tutorialView = TutorialView(frame: UIScreen.mainScreen().bounds)
-        self.blankItem = TutorialItem(view: tutorialView, identifier: "blankItem")
+        let blankView = TutorialView(frame: UIScreen.mainScreen().bounds)
+        blankItem = TutorialItem(view: blankView, identifier: "blankItem")
+        
+        let transparentView = TutorialView(frame: UIScreen.mainScreen().bounds)
+        transparentView.backgroundColor = UIColor.clearColor()
+        transparentItem = TutorialItem(view: transparentView, identifier: "transparentItem")
     }
     
     public func registerItem(item: TutorialItem) {
-        self.items[item.tutorialID] = item
+        items[item.tutorialID] = item
     }
     
     public func showTutorialWithIdentifier(tutorialID: String) {
-        if !self.shouldShowTutorial {
+        if !shouldShowTutorial {
             print("TutorialManager.shouldShowTutorial = false\nTutorial Manager will return without showing tutorial.")
             return
         }
         
         if let window = UIApplication.sharedApplication().delegate?.window {
-            if let item = self.items[tutorialID] {
-                self.blankItem.view.removeFromSuperview()
+            if let item = items[tutorialID] {
+                blankItem.view.removeFromSuperview()
+                transparentItem.view.removeFromSuperview()
                 window?.addSubview(item.view)
+                window?.setNeedsLayout()
                 
-                self.currentItem?.view.removeFromSuperview()
-                self.currentItem = item
+                currentItem?.view.removeFromSuperview()
+                currentItem = item
             } else {
                 print("ERROR: \(TutorialManager.self) line #\(#line) - \(#function)\n** Reason: No registered item with identifier: \(tutorialID)")
             }
@@ -218,15 +240,26 @@ public class TutorialManager: NSObject {
     }
     
     public func showBlankItem() {
-        UIApplication.sharedApplication().delegate!.window!!.addSubview(self.blankItem.view)
-        self.currentItem?.nextAction?()
-        self.currentItem?.view.removeFromSuperview()
-        self.currentItem = nil
+        UIApplication.sharedApplication().delegate!.window!!.addSubview(blankItem.view)
+        UIApplication.sharedApplication().delegate!.window!!.setNeedsLayout()
+        
+        currentItem?.nextAction?()
+        currentItem?.view.removeFromSuperview()
+        currentItem = nil
+    }
+    
+    public func showTransparentItem() {
+        UIApplication.sharedApplication().delegate!.window!!.addSubview(transparentItem.view)
+        UIApplication.sharedApplication().delegate!.window!!.setNeedsLayout()
+        
+        currentItem?.nextAction?()
+        currentItem?.view.removeFromSuperview()
+        currentItem = nil
     }
     
     public func hideTutorial() {
-        self.currentItem?.nextAction?()
-        self.currentItem?.view.removeFromSuperview()
-        self.currentItem = nil
+        currentItem?.nextAction?()
+        currentItem?.view.removeFromSuperview()
+        currentItem = nil
     }
 }

@@ -70,7 +70,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="dS3-xG-CYA"/>
                     <connections>
-                        <outlet property="addButton" destination="b6k-Kf-DEJ" id="XS2-0o-mx6"/>
+                        <outlet property="buttonAdd" destination="b6k-Kf-DEJ" id="jNB-gX-qe5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
@@ -104,7 +104,51 @@
                     <view key="view" contentMode="scaleToFill" id="VRb-P3-Zsj">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MFe-ir-veM">
+                                <rect key="frame" x="195" y="266" width="210" height="68"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JFV-yM-IDh">
+                                        <rect key="frame" x="0.0" y="0.0" width="45" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="90c-sX-BGd">
+                                        <rect key="frame" x="60" y="0.0" width="150" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="next"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="MXa-0w-vFw" id="ZUf-st-2Iv"/>
+                                        </connections>
+                                    </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IPf-Zo-VMn">
+                                        <rect key="frame" x="0.0" y="38" width="45" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Jl5-G3-m83">
+                                        <rect key="frame" x="60" y="38" width="150" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="MXa-0w-vFw" id="zW6-t2-Qka"/>
+                                        </connections>
+                                    </textField>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="68" id="Sh7-1z-EhO"/>
+                                    <constraint firstAttribute="width" constant="210" id="xoq-ni-aRn"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="MFe-ir-veM" firstAttribute="centerX" secondItem="VRb-P3-Zsj" secondAttribute="centerX" id="Ufn-Uq-sbg"/>
+                            <constraint firstItem="MFe-ir-veM" firstAttribute="centerY" secondItem="VRb-P3-Zsj" secondAttribute="centerY" id="qQG-Rc-kth"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Dpe-oc-tzw">
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="OFS-9Q-hhC">
@@ -113,6 +157,10 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="textFieldEmail" destination="Jl5-G3-m83" id="Zco-3T-sTl"/>
+                        <outlet property="textFieldName" destination="90c-sX-BGd" id="ERj-0a-fD5"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9eE-S1-oex" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="ewY-gi-czC" userLabel="Exit" sceneMemberID="exit"/>

@@ -9,15 +9,12 @@
 import UIKit
 import KRWalkThrough
 
-var Screen: UIScreen {
-    return UIScreen.mainScreen()
-}
-
 class ViewController: UIViewController {
     var isFirstLogin: Bool {
         return NSUserDefaults.standardUserDefaults().boolForKey(UserDefaultsKey.isFirstLogin)
     }
-    @IBOutlet weak var addButton: UIButton!
+    
+    @IBOutlet weak var buttonAdd: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,18 +41,22 @@ class ViewController: UIViewController {
     // MARK: - Target action
     
     @IBAction func resetAction(sender: AnyObject) {
-        
+        NSUserDefaults.standardUserDefaults().setBool(true, forKey: UserDefaultsKey.isFirstLogin)
+        TutorialManager.sharedManager().shouldShowTutorial = true
+        TutorialManager.sharedManager().showTutorialWithIdentifier("1")
     }
     
     @IBAction func dismissViewController(segue: UIStoryboardSegue) {
-        
+        NSUserDefaults.standardUserDefaults().setBool(false, forKey: UserDefaultsKey.isFirstLogin)
+        TutorialManager.sharedManager().shouldShowTutorial = false
+        TutorialManager.sharedManager().hideTutorial()
     }
     
     @IBAction func backgroundAction(sender: AnyObject) {
         print("** This message shouldn't show during walk through **")
     }
     
-    // MARK: - Private
+    // MARK: - Tutorial
     
     private func setUpWalkThrough() {
         // 1. Show welcome page with button
@@ -72,7 +73,7 @@ class ViewController: UIViewController {
         }
         
         let view2 = TutorialView(frame: Screen.bounds)
-        view2.makeAvailable(addButton, radiusInset: 20.0)
+        view2.makeAvailable(buttonAdd, radiusInset: 20.0)
         
         let prevButton2 = UIButton(type: .System)
         prevButton2.frame = CGRectMake(0.0, 22.0, 100.0, 44.0)
@@ -82,6 +83,17 @@ class ViewController: UIViewController {
         view2.addSubview(prevButton2)
         view2.prevButton = prevButton2
         
+        let label2 = UILabel()
+        label2.translatesAutoresizingMaskIntoConstraints = false
+        label2.text = "Tap \"+\" button to add."
+        label2.textColor = UIColor.whiteColor()
+        
+        view2.addSubview(label2)
+        view2.addConstraints([
+            NSLayoutConstraint(item: label2, attribute: .CenterX, relatedBy: .Equal, toItem: view2, attribute: .CenterX, multiplier: 1.5, constant: 0.0),
+            NSLayoutConstraint(item: label2, attribute: .CenterY, relatedBy: .Equal, toItem: view2, attribute: .CenterY, multiplier: 1.0, constant: 0.0)
+            ])
+        
         let item2 = TutorialItem(view: view2, identifier: "2")
         item2.prevAction = {
             TutorialManager.sharedManager().showTutorialWithIdentifier("1")
@@ -89,6 +101,14 @@ class ViewController: UIViewController {
         
         TutorialManager.sharedManager().registerItem(item1)
         TutorialManager.sharedManager().registerItem(item2)
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if isFirstLogin {
+            TutorialManager.sharedManager().showTransparentItem()
+        }
     }
 }
 

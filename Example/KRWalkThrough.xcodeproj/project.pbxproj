@@ -96,8 +96,8 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				D1F803F11CFFDB7A007555C7 /* Config.swift */,
-				D1F803F31CFFEA32007555C7 /* PresentedViewController.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
+				D1F803F31CFFEA32007555C7 /* PresentedViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				D1F803F51CFFEBD8007555C7 /* Welcome.xib */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,

@@ -6,8 +6,12 @@
 //  Copyright © 2016 CocoaPods. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct UserDefaultsKey {
     static let isFirstLogin = "isFirstLogin"
+}
+
+var Screen: UIScreen {
+    return UIScreen.mainScreen()
 }
