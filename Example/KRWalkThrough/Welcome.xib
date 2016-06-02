@@ -3,6 +3,8 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -24,13 +26,13 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DEMO" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2xr-tR-ztN">
-                                            <rect key="frame" x="241.5" y="276" width="117.5" height="48"/>
+                                            <rect key="frame" x="241.5" y="216" width="117.5" height="48"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="40"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zcq-gH-N7K">
-                                            <rect key="frame" x="250" y="442" width="100" height="44"/>
+                                            <rect key="frame" x="191.5" y="442" width="100" height="44"/>
                                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="44" id="3eX-u3-qgX"/>
@@ -41,13 +43,27 @@
                                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                         </button>
+                                        <button opaque="NO" tag="-1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dOs-OX-BDg">
+                                            <rect key="frame" x="309" y="442" width="100" height="44"/>
+                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="100" id="4r8-Rl-5bd"/>
+                                                <constraint firstAttribute="height" constant="44" id="oF8-B9-GyF"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <state key="normal" title="QUIT">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstItem="2xr-tR-ztN" firstAttribute="centerX" secondItem="Fa4-b4-YqD" secondAttribute="centerX" id="Buh-kY-thx"/>
+                                        <constraint firstItem="zcq-gH-N7K" firstAttribute="centerX" secondItem="2xr-tR-ztN" secondAttribute="leading" id="Ehv-np-sii"/>
+                                        <constraint firstItem="dOs-OX-BDg" firstAttribute="centerX" secondItem="2xr-tR-ztN" secondAttribute="trailing" id="IiU-DX-uCk"/>
+                                        <constraint firstItem="zcq-gH-N7K" firstAttribute="centerY" secondItem="dOs-OX-BDg" secondAttribute="centerY" id="VP0-iF-jMK"/>
                                         <constraint firstAttribute="bottom" secondItem="zcq-gH-N7K" secondAttribute="bottom" constant="114" id="YPN-qr-Kgb"/>
-                                        <constraint firstItem="zcq-gH-N7K" firstAttribute="centerX" secondItem="Fa4-b4-YqD" secondAttribute="centerX" id="ZuB-Re-MVx"/>
-                                        <constraint firstItem="2xr-tR-ztN" firstAttribute="centerY" secondItem="Fa4-b4-YqD" secondAttribute="centerY" id="bLh-ck-LWu"/>
+                                        <constraint firstItem="2xr-tR-ztN" firstAttribute="centerY" secondItem="Fa4-b4-YqD" secondAttribute="centerY" multiplier="0.8" id="bLh-ck-LWu"/>
                                     </constraints>
                                 </view>
                                 <vibrancyEffect>

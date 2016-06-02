@@ -43,17 +43,32 @@ class ViewController: UIViewController {
     @IBAction func resetAction(sender: AnyObject) {
         NSUserDefaults.standardUserDefaults().setBool(true, forKey: UserDefaultsKey.isFirstLogin)
         TutorialManager.sharedManager().shouldShowTutorial = true
+        setUpWalkThrough()
         TutorialManager.sharedManager().showTutorialWithIdentifier("1")
     }
     
     @IBAction func dismissViewController(segue: UIStoryboardSegue) {
-        NSUserDefaults.standardUserDefaults().setBool(false, forKey: UserDefaultsKey.isFirstLogin)
-        TutorialManager.sharedManager().shouldShowTutorial = false
-        TutorialManager.sharedManager().hideTutorial()
+        finishTutorial()
     }
     
     @IBAction func backgroundAction(sender: AnyObject) {
-        print("** This message shouldn't show during walk through **")
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.text = "Background was tapped.\nThis message shouldn't\nshow during tutorial."
+        label.textAlignment = .Center
+        label.textColor = UIColor.redColor()
+        
+        self.view.addSubview(label)
+        self.view.addConstraints([
+            NSLayoutConstraint(item: label, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: label, attribute: .CenterY, relatedBy: .Equal, toItem: self.view, attribute: .CenterY, multiplier: 1.5, constant: 0.0)
+            ])
+        
+        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(Double(NSEC_PER_SEC) * 1.5))
+        dispatch_after(time, dispatch_get_main_queue()) {
+            label.removeFromSuperview()
+        }
     }
     
     // MARK: - Tutorial
@@ -71,6 +86,9 @@ class ViewController: UIViewController {
         item1.nextAction = {
             TutorialManager.sharedManager().showTutorialWithIdentifier("2")
         }
+        
+        let quitButton = item1.view.viewWithTag(-1) as! UIButton
+        quitButton.addTarget(self, action: #selector(finishTutorial), forControlEvents: .TouchUpInside)
         
         let view2 = TutorialView(frame: Screen.bounds)
         view2.makeAvailable(buttonAdd, radiusInset: 20.0)
@@ -90,8 +108,8 @@ class ViewController: UIViewController {
         
         view2.addSubview(label2)
         view2.addConstraints([
-            NSLayoutConstraint(item: label2, attribute: .CenterX, relatedBy: .Equal, toItem: view2, attribute: .CenterX, multiplier: 1.5, constant: 0.0),
-            NSLayoutConstraint(item: label2, attribute: .CenterY, relatedBy: .Equal, toItem: view2, attribute: .CenterY, multiplier: 1.0, constant: 0.0)
+            NSLayoutConstraint(item: label2, attribute: .CenterX, relatedBy: .Equal, toItem: view2, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: label2, attribute: .CenterY, relatedBy: .Equal, toItem: view2, attribute: .CenterY, multiplier: 1.5, constant: 0.0)
             ])
         
         let item2 = TutorialItem(view: view2, identifier: "2")
@@ -101,6 +119,13 @@ class ViewController: UIViewController {
         
         TutorialManager.sharedManager().registerItem(item1)
         TutorialManager.sharedManager().registerItem(item2)
+    }
+    
+    @objc private func finishTutorial() {
+        NSUserDefaults.standardUserDefaults().setBool(false, forKey: UserDefaultsKey.isFirstLogin)
+        TutorialManager.sharedManager().shouldShowTutorial = false
+        TutorialManager.sharedManager().hideTutorial()
+
     }
     
     // MARK: - Navigation

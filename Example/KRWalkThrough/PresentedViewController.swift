@@ -70,7 +70,7 @@ class PresentedViewController: UIViewController, UITextFieldDelegate {
         let item4 = TutorialItem(view: view4, identifier: "4")
         TutorialManager.sharedManager().registerItem(item4)
         
-        let doneX: CGFloat = Screen.bounds.width - 90.0
+        let doneX: CGFloat = Screen.bounds.width - 85.0
         let doneY: CGFloat = -10.0
         
         let doneRect = CGRectMake(doneX, doneY, 100.0, 100.0)
