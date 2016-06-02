@@ -1,6 +1,6 @@
 # KRWalkThrough
 
-[![CI Status](http://img.shields.io/travis/Joshua Park/KRWalkThrough.svg?style=flat)](https://travis-ci.org/Joshua Park/KRWalkThrough)
+[![CI Status](http://img.shields.io/travis/Josh Woomin Park/KRWalkThrough.svg?style=flat)](https://travis-ci.org/Joshua Park/KRWalkThrough)
 [![Version](https://img.shields.io/cocoapods/v/KRWalkThrough.svg?style=flat)](http://cocoapods.org/pods/KRWalkThrough)
 [![License](https://img.shields.io/cocoapods/l/KRWalkThrough.svg?style=flat)](http://cocoapods.org/pods/KRWalkThrough)
 [![Platform](https://img.shields.io/cocoapods/p/KRWalkThrough.svg?style=flat)](http://cocoapods.org/pods/KRWalkThrough)
@@ -22,7 +22,7 @@ pod "KRWalkThrough"
 
 ## Author
 
-Joshua Park, wmpark@knowre.com
+Josh Woomin Park, wmpark@knowre.com
 
 ## License
 

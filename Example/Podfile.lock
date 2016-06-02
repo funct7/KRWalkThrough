@@ -1,0 +1,14 @@
+PODS:
+  - KRWalkThrough (0.1.0)
+
+DEPENDENCIES:
+  - KRWalkThrough (from `../`)
+
+EXTERNAL SOURCES:
+  KRWalkThrough:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  KRWalkThrough: 15afb49140287c29728fb1bde6ce4b8c2661e323
+
+COCOAPODS: 0.39.0

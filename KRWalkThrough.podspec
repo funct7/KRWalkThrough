@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'KRWalkThrough'
-  s.version          = '0.1.0'
-  s.summary          = 'A short description of KRWalkThrough.'
+  s.version          = '0.9.3'
+  s.summary          = 'Easily show tutorial anywhere in your project with the minimal amount of code to obstruct the regular app flow.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,18 +18,23 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+By including KRWalkThrough into your project, you can easily build a walk through 
+without polluting your code with walk through code, which is most likely used in the
+app only once.
+
+Using TutorialManager, a singleton object that will overlay the walk through on top of
+your regular views, you can control the next steps of the walk through easily.
                        DESC
 
-  s.homepage         = 'https://github.com/<GITHUB_USERNAME>/KRWalkThrough'
+  s.homepage         = 'https://github.com/BridgeTheGap/KRWalkThrough'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Joshua Park' => 'wmpark@knowre.com' }
-  s.source           = { :git => 'https://github.com/<GITHUB_USERNAME>/KRWalkThrough.git', :tag => s.version.to_s }
+  s.author           = { 'Josh Woomin Park' => 'wmpark@knowre.com' }
+  s.source           = { :git => 'https://github.com/BridgeTheGap/KRWalkThrough.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
+  s.frameworks = 'UIKit'
   s.ios.deployment_target = '8.0'
-
   s.source_files = 'KRWalkThrough/Classes/**/*'
   
   # s.resource_bundles = {
@@ -37,6 +42,5 @@ TODO: Add long description of the pod here.
   # }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  
 end

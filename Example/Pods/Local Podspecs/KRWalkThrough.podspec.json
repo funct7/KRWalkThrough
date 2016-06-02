@@ -1,0 +1,22 @@
+{
+  "name": "KRWalkThrough",
+  "version": "0.1.0",
+  "summary": "A short description of KRWalkThrough.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/<GITHUB_USERNAME>/KRWalkThrough",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Joshua Park": "wmpark@knowre.com"
+  },
+  "source": {
+    "git": "https://github.com/<GITHUB_USERNAME>/KRWalkThrough.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "KRWalkThrough/Classes/**/*"
+}
