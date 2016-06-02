@@ -17,33 +17,42 @@ public class TutorialView: UIView {
     
     @IBOutlet public weak var prevButton: UIButton?
     @IBOutlet public weak var nextButton: UIButton?
-    
     public override var backgroundColor: UIColor? {
         get {
-            return UIColor(CGColor: self.backgroundLayer.fillColor!)
+            return fillColor
         }
         set {
-            self.backgroundLayer.fillColor = newValue?.CGColor
+            if let color = newValue { fillColor = color }
+        }
+    }
+    public override var frame: CGRect {
+        didSet {
+            if frame != oldValue {
+                if var touchArea = touchArea {
+                    let hScale = frame.width / oldValue.width
+                    let vScale = frame.height / oldValue.height
+                        
+                    touchArea.origin.x *= hScale
+                    touchArea.origin.y *= vScale
+                    self.touchArea = touchArea
+                    
+                    if var maskRect = maskRect {
+                        maskRect.origin.x *= hScale
+                        maskRect.origin.y *= vScale
+                        
+                        self.maskRect = maskRect
+                    }
+                }
+            }
         }
     }
     
     //: The area that receives touch as defined by the view upon initialization
     //: touchArea and nextButton should be mutally exclusive
+    private var fillColor = UIColor(white: 0.0, alpha: 0.5)
     private var touchArea: CGRect?
-    
-    private weak var backgroundLayer: CAShapeLayer!
-    
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        self.prepareSubviews()
-    }
-    
-    public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        
-        self.prepareSubviews()
-    }
+    private var maskRect: CGRect?
+    private var cornerRadius: CGFloat?
     
     public func makeAvailable(view: UIView) {
         let frame = self.convertRect(view.frame, fromView: view.superview)
@@ -52,6 +61,10 @@ public class TutorialView: UIView {
     
     //: Makes a circle-shaped available area with the given radius inset
     public func makeAvailable(view: UIView, radiusInset: CGFloat) {
+        if !view.translatesAutoresizingMaskIntoConstraints {
+            view.superview?.layoutIfNeeded()
+        }
+        
         let frame = self.convertRect(view.frame, fromView: view.superview)
         let center = self.convertPoint(view.center, fromView: view.superview)
         let rawDiameter = sqrt(pow(view.frame.width, 2) + pow(view.frame.height, 2))
@@ -68,23 +81,33 @@ public class TutorialView: UIView {
     }
     
     public func makeAvailable(rect: CGRect, maskRect: CGRect, cornerRadius: CGFloat) {
-        let subPath = UIBezierPath(roundedRect: maskRect, cornerRadius: cornerRadius)
-        let path = UIBezierPath(rect: self.bounds)
-        path.appendPath(subPath)
-        
-        self.backgroundLayer.path = path.CGPath
-        
         self.touchArea = rect
+        self.maskRect = maskRect
+        self.cornerRadius = cornerRadius
     }
     
-    private func prepareSubviews() {
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        for layer in self.layer.sublayers ?? [] {
+            if layer.name == "TutorialView.backgroundLayer" {
+                layer.removeFromSuperlayer()
+            }
+        }
+        
+        let path = UIBezierPath(rect: self.bounds)
+        if let maskRect = maskRect, let cornerRadius = cornerRadius {
+            path.appendPath(UIBezierPath(roundedRect: maskRect, cornerRadius: cornerRadius))
+        }
+        
         let backgroundLayer = CAShapeLayer()
-        backgroundLayer.frame = self.bounds
-        backgroundLayer.path = UIBezierPath(rect: self.bounds).CGPath
-        backgroundLayer.fillColor = UIColor(white: 0.0, alpha: 0.5).CGColor
+        backgroundLayer.fillColor = fillColor.CGColor
         backgroundLayer.fillRule = kCAFillRuleEvenOdd
-        self.layer.addSublayer(backgroundLayer)
-        self.backgroundLayer = backgroundLayer
+        backgroundLayer.frame = self.bounds
+        backgroundLayer.name = "TutorialView.backgroundLayer"
+        backgroundLayer.path = path.CGPath
+        
+        layer.insertSublayer(backgroundLayer, atIndex: 0)
     }
     
     public override func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView? {
