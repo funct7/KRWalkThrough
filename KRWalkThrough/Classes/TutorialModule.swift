@@ -17,6 +17,7 @@ public class TutorialView: UIView {
     
     @IBOutlet public weak var prevButton: UIButton?
     @IBOutlet public weak var nextButton: UIButton?
+    
     public override var backgroundColor: UIColor? {
         get {
             return fillColor
@@ -46,6 +47,8 @@ public class TutorialView: UIView {
             }
         }
     }
+    
+    public var animationScale: CGFloat = 1.0
     
     //: The area that receives touch as defined by the view upon initialization
     //: touchArea and nextButton should be mutally exclusive
@@ -105,14 +108,19 @@ public class TutorialView: UIView {
         super.layoutSubviews()
         
         for layer in self.layer.sublayers ?? [] {
-            if layer.name == "TutorialView.backgroundLayer" {
+            if layer.name == "TutorialView.backgroundLayer" || layer.name == "TutorialView.animationLayer" {
                 layer.removeFromSuperlayer()
             }
         }
         
         let path = UIBezierPath(rect: bounds)
         if let maskRect = maskRect, let cornerRadius = cornerRadius {
-            path.appendPath(UIBezierPath(roundedRect: maskRect, cornerRadius: cornerRadius))
+            let subPath = UIBezierPath(roundedRect: maskRect, cornerRadius: cornerRadius)
+            path.appendPath(subPath)
+            
+            if let animationLayer = getAnimationLayer() {
+                layer.insertSublayer(animationLayer, atIndex: 0)
+            }
         }
         
         let backgroundLayer = CAShapeLayer()
@@ -130,6 +138,51 @@ public class TutorialView: UIView {
             return nil
         }
         return super.hitTest(point, withEvent: event)
+    }
+    
+    private func getAnimationLayer() -> CAShapeLayer? {
+        guard let maskRect = maskRect, let cornerRadius = cornerRadius where animationScale > 1.0 else {
+            return nil
+        }
+        let subPath = UIBezierPath(roundedRect: maskRect, cornerRadius: cornerRadius)
+        
+        let animationLayer = CAShapeLayer()
+        animationLayer.strokeColor = UIColor.whiteColor().CGColor
+        animationLayer.fillColor = UIColor.clearColor().CGColor
+        animationLayer.lineWidth = 1.0
+        animationLayer.name = "TutorialView.animationLayer"
+        animationLayer.path = subPath.CGPath
+
+        var biggerRect = maskRect
+        let offsetScale = (animationScale - 1.0) / 2.0
+        biggerRect.origin.x -= biggerRect.width * offsetScale
+        biggerRect.origin.y -= biggerRect.height * offsetScale
+        biggerRect.size.width *= animationScale
+        biggerRect.size.height *= animationScale
+        
+        let animFocus = CABasicAnimation(keyPath: "path")
+        animFocus.fromValue = UIBezierPath(roundedRect: biggerRect, cornerRadius: cornerRadius * 1.25).CGPath
+        animFocus.toValue = subPath.CGPath
+        animFocus.delegate = self
+        animFocus.duration = 0.75
+        animFocus.repeatCount = Float.infinity
+        animationLayer.addAnimation(animFocus, forKey: nil)
+        
+        let animLine = CABasicAnimation(keyPath: "lineWidth")
+        animLine.fromValue = 2.0
+        animLine.toValue = 0.0
+        animLine.duration = 0.75
+        animLine.repeatCount = Float.infinity
+        animationLayer.addAnimation(animLine, forKey: nil)
+        
+        let animOpacity = CABasicAnimation(keyPath: "opacity")
+        animOpacity.fromValue = 0.25
+        animOpacity.toValue = 0.95
+        animOpacity.duration = 0.75
+        animOpacity.repeatCount = Float.infinity
+        animationLayer.addAnimation(animOpacity, forKey: nil)
+        
+        return animationLayer
     }
 }
 

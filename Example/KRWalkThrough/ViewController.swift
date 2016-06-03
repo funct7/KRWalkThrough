@@ -74,13 +74,6 @@ class ViewController: UIViewController {
     // MARK: - Tutorial
     
     private func setUpWalkThrough() {
-        // 1. Show welcome page with button
-        // 2. Focus + button in the middle
-        // 3. Modally present a view with text fields. Focus first text field
-        // 4. Focus next text field
-        // 5. Focus `Done` button on upper-right corner
-        // 6. Show finish button
-        
         let item1 = TutorialItem(nibName: "Welcome", identifier: "1")
         item1.view.frame = Screen.bounds
         item1.nextAction = {
@@ -92,6 +85,7 @@ class ViewController: UIViewController {
         
         let view2 = TutorialView(frame: Screen.bounds)
         view2.makeAvailable(buttonAdd, radiusInset: 20.0)
+        view2.animationScale = 1.2
         
         let prevButton2 = UIButton(type: .System)
         prevButton2.frame = CGRectMake(0.0, 22.0, 100.0, 44.0)
