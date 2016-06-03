@@ -131,6 +131,16 @@ public class TutorialView: UIView {
         }
         return super.hitTest(point, withEvent: event)
     }
+    
+    private func trackTouch(point: CGPoint) {
+        let offsetX = point.x - CGRectGetMidX(touchArea!)
+        let offsetY = point.y - CGRectGetMidY(touchArea!)
+        
+        touchArea = CGRect(origin: CGPointMake(point.x - touchArea!.width / 2.0, point.y - touchArea!.width / 2.0), size: touchArea!.size)
+        maskRect = CGRectOffset(maskRect!, offsetX, offsetY)
+        
+        layoutSubviews()
+    }
 }
 
 // ===========================
@@ -237,6 +247,10 @@ public class TutorialManager: NSObject {
                 print("ERROR: \(TutorialManager.self) line #\(#line) - \(#function)\n** Reason: No registered item with identifier: \(tutorialID)")
             }
         }
+    }
+    
+    public func trackTouch(point: CGPoint) {
+        currentItem?.view.trackTouch(point)
     }
     
     public func showBlankItem() {

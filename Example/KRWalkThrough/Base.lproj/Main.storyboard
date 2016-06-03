@@ -37,6 +37,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b6k-Kf-DEJ">
                                 <rect key="frame" x="275" y="275" width="50" height="50"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="b6k-Kf-DEJ" secondAttribute="height" multiplier="1:1" id="OEW-pC-pQ7"/>
                                     <constraint firstAttribute="width" constant="50" id="eGc-jH-KLp"/>
@@ -46,6 +47,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
+                                    <outletCollection property="gestureRecognizers" destination="Xhh-um-xCO" appends="YES" id="cKR-wx-HEo"/>
                                     <segue destination="66H-Kb-TQZ" kind="presentation" id="dp0-Ck-XBO"/>
                                 </connections>
                             </button>
@@ -74,6 +76,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="Xhh-um-xCO">
+                    <connections>
+                        <action selector="panAction:" destination="vXZ-lx-hvc" id="UhG-rg-RGv"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="883" y="659"/>
         </scene>

@@ -71,6 +71,15 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func panAction(sender: UIPanGestureRecognizer) {
+        let location = sender.locationInView(view)
+        buttonAdd.center = location
+        
+        if isFirstLogin {
+            TutorialManager.sharedManager().trackTouch(location)
+        }
+    }
+    
     // MARK: - Tutorial
     
     private func setUpWalkThrough() {
