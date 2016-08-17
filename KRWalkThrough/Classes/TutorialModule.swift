@@ -15,8 +15,8 @@ import UIKit
 public class TutorialView: UIView {
     public weak var item: TutorialItem!
     
-    @IBOutlet public weak var prevButton: UIButton?
-    @IBOutlet public weak var nextButton: UIButton?
+    @IBOutlet public weak var prevButton: UIControl?
+    @IBOutlet public weak var nextButton: UIControl?
     public override var backgroundColor: UIColor? {
         get {
             return fillColor
