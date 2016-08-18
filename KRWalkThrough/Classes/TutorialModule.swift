@@ -138,7 +138,7 @@ public class TutorialView: UIView {
 // ===========================
 
 public class TutorialItem: NSObject {
-    public let tutorialID: String
+    public let identifier: String
     
     public var prevAction: (() -> Void)?
     public var nextAction: (() -> Void)?
@@ -148,7 +148,7 @@ public class TutorialItem: NSObject {
     public init(view: TutorialView, identifier: String) {
         assert(!identifier.isEmpty, "Tutorial view must have a valid identifier.")
         self.view = view
-        self.tutorialID = identifier
+        self.identifier = identifier
         super.init()
         prepareView()
     }
@@ -156,7 +156,16 @@ public class TutorialItem: NSObject {
     public init(nibName: String, identifier: String) {
         assert(!identifier.isEmpty, "Tutorial view must have a valid identifier.")
         self.view = NSBundle.mainBundle().loadNibNamed(nibName, owner: nil, options: nil)[0] as! TutorialView
-        self.tutorialID = identifier
+        self.identifier = identifier
+        super.init()
+        prepareView()
+    }
+    
+    public init(storyboardName: String, storyboardID: String, identifier: String) {
+        assert(!identifier.isEmpty, "Tutorial view must have a valid identifier.")
+        let vc = UIStoryboard(name: storyboardName, bundle: nil).instantiateViewControllerWithIdentifier(storyboardID)
+        self.view = vc.view as! TutorialView
+        self.identifier = identifier
         super.init()
         prepareView()
     }
@@ -215,50 +224,57 @@ public class TutorialManager: NSObject {
     }
     
     public func registerItem(item: TutorialItem) {
-        items[item.tutorialID] = item
+        items[item.identifier] = item
+    }
+    
+    public func performNextAction() {
+        currentItem?.nextAction?()
     }
     
     public func showTutorialWithIdentifier(tutorialID: String) {
-        if !shouldShowTutorial {
+        guard shouldShowTutorial else {
             print("TutorialManager.shouldShowTutorial = false\nTutorial Manager will return without showing tutorial.")
             return
         }
         
-        if let window = UIApplication.sharedApplication().delegate?.window {
-            if let item = items[tutorialID] {
-                blankItem.view.removeFromSuperview()
-                transparentItem.view.removeFromSuperview()
-                window?.addSubview(item.view)
-                window?.setNeedsLayout()
-                
-                currentItem?.view.removeFromSuperview()
-                currentItem = item
-            } else {
-                print("ERROR: \(TutorialManager.self) line #\(#line) - \(#function)\n** Reason: No registered item with identifier: \(tutorialID)")
-            }
+        guard let window = UIApplication.sharedApplication().delegate?.window else {
+            fatalError("UIApplication delegate's window is missing.")
         }
+        
+        guard let item = items[tutorialID] else {
+            print("ERROR: \(TutorialManager.self) line #\(#line) - \(#function)\n** Reason: No registered item with identifier: \(tutorialID)")
+            return
+        }
+        
+        if blankItem.view.superview != nil { blankItem.view.removeFromSuperview() }
+        if transparentItem.view.superview != nil { transparentItem.view.removeFromSuperview() }
+        window?.addSubview(item.view)
+        window?.setNeedsLayout()
+        
+        if currentItem?.view.superview != nil { currentItem?.view.removeFromSuperview() }
+        currentItem = item
     }
     
-    public func showBlankItem() {
+    public func showBlankItem(performNextAction: Bool = false) {
         UIApplication.sharedApplication().delegate!.window!!.addSubview(blankItem.view)
         UIApplication.sharedApplication().delegate!.window!!.setNeedsLayout()
         
-        currentItem?.nextAction?()
+        if performNextAction { currentItem?.nextAction?() }
         currentItem?.view.removeFromSuperview()
         currentItem = nil
     }
     
-    public func showTransparentItem() {
+    public func showTransparentItem(performNextAction: Bool = false) {
         UIApplication.sharedApplication().delegate!.window!!.addSubview(transparentItem.view)
         UIApplication.sharedApplication().delegate!.window!!.setNeedsLayout()
         
-        currentItem?.nextAction?()
+        if performNextAction { currentItem?.nextAction?() }
         currentItem?.view.removeFromSuperview()
         currentItem = nil
     }
     
-    public func hideTutorial() {
-        currentItem?.nextAction?()
+    public func hideTutorial(performNextAction: Bool = false) {
+        if performNextAction { currentItem?.nextAction?() }
         currentItem?.view.removeFromSuperview()
         currentItem = nil
     }
