@@ -12,12 +12,12 @@ import UIKit
 // MARK: - Tutorial View
 // ===========================
 
-public class TutorialView: UIView {
-    public weak var item: TutorialItem!
+open class TutorialView: UIView {
+    open weak var item: TutorialItem!
     
-    @IBOutlet public weak var prevButton: UIButton?
-    @IBOutlet public weak var nextButton: UIButton?
-    public override var backgroundColor: UIColor? {
+    @IBOutlet open weak var prevButton: UIButton?
+    @IBOutlet open weak var nextButton: UIButton?
+    open override var backgroundColor: UIColor? {
         get {
             return fillColor
         }
@@ -25,7 +25,7 @@ public class TutorialView: UIView {
             if let color = newValue { fillColor = color }
         }
     }
-    public override var frame: CGRect {
+    open override var frame: CGRect {
         didSet {
             if frame != oldValue {
                 if var touchArea = touchArea {
@@ -49,39 +49,39 @@ public class TutorialView: UIView {
     
     //: The area that receives touch as defined by the view upon initialization
     //: touchArea and nextButton should be mutally exclusive
-    private var fillColor = UIColor(white: 0.0, alpha: 0.5)
-    private var touchArea: CGRect?
-    private var maskRect: CGRect?
-    private var cornerRadius: CGFloat?
+    fileprivate var fillColor = UIColor(white: 0.0, alpha: 0.5)
+    fileprivate var touchArea: CGRect?
+    fileprivate var maskRect: CGRect?
+    fileprivate var cornerRadius: CGFloat?
     
-    public func makeAvailable(view: UIView) {
-        let frame = convertRect(view.frame, fromView: view.superview)
+    open func makeAvailable(_ view: UIView) {
+        let frame = convert(view.frame, from: view.superview)
         makeAvailable(frame, maskRect: frame, cornerRadius: 0.0)
     }
     
     //: Makes a circle-shaped available area with the given radius inset
-    public func makeAvailable(view: UIView, radiusInset: CGFloat) {
+    open func makeAvailable(_ view: UIView, radiusInset: CGFloat) {
         if !view.translatesAutoresizingMaskIntoConstraints {
             view.superview?.layoutIfNeeded()
         }
         
-        let rect = convertRect(view.frame, fromView: view.superview)
-        let center = convertPoint(view.center, fromView: view.superview)
+        let rect = convert(view.frame, from: view.superview)
+        let center = convert(view.center, from: view.superview)
         let rawDiameter = sqrt(pow(view.frame.width, 2) + pow(view.frame.height, 2))
         let diameter = round(rawDiameter) + radiusInset * 2.0
         
         let x = center.x - diameter / 2.0
         let y = center.y - diameter / 2.0
         
-        makeAvailable(rect, maskRect: CGRectMake(x, y, diameter, diameter), cornerRadius: diameter/2.0)
+        makeAvailable(rect, maskRect: CGRect(x: x, y: y, width: diameter, height: diameter), cornerRadius: diameter/2.0)
     }
     
-    public func makeAvailable(view: UIView, insets: UIEdgeInsets, cornerRadius: CGFloat) {
+    open func makeAvailable(_ view: UIView, insets: UIEdgeInsets, cornerRadius: CGFloat) {
         if !view.translatesAutoresizingMaskIntoConstraints {
             view.superview?.layoutIfNeeded()
         }
         
-        let rect = convertRect(view.frame, fromView: view.superview)
+        let rect = convert(view.frame, from: view.superview)
         var maskRect = rect
         maskRect.origin.x -= insets.left
         maskRect.origin.y -= insets.top
@@ -91,17 +91,17 @@ public class TutorialView: UIView {
         makeAvailable(rect, maskRect: maskRect, cornerRadius: cornerRadius)
     }
     
-    public func makeAvailable(rect: CGRect, cornerRadius: CGFloat) {
+    open func makeAvailable(_ rect: CGRect, cornerRadius: CGFloat) {
         makeAvailable(rect, maskRect: rect, cornerRadius: cornerRadius)
     }
     
-    public func makeAvailable(rect: CGRect, maskRect: CGRect, cornerRadius: CGFloat) {
+    open func makeAvailable(_ rect: CGRect, maskRect: CGRect, cornerRadius: CGFloat) {
         touchArea = rect
         self.maskRect = maskRect
         self.cornerRadius = cornerRadius
     }
     
-    public override func layoutSubviews() {
+    open override func layoutSubviews() {
         super.layoutSubviews()
         
         for layer in self.layer.sublayers ?? [] {
@@ -112,24 +112,24 @@ public class TutorialView: UIView {
         
         let path = UIBezierPath(rect: bounds)
         if let maskRect = maskRect, let cornerRadius = cornerRadius {
-            path.appendPath(UIBezierPath(roundedRect: maskRect, cornerRadius: cornerRadius))
+            path.append(UIBezierPath(roundedRect: maskRect, cornerRadius: cornerRadius))
         }
         
         let backgroundLayer = CAShapeLayer()
-        backgroundLayer.fillColor = fillColor.CGColor
+        backgroundLayer.fillColor = fillColor.cgColor
         backgroundLayer.fillRule = kCAFillRuleEvenOdd
         backgroundLayer.frame = bounds
         backgroundLayer.name = "TutorialView.backgroundLayer"
-        backgroundLayer.path = path.CGPath
+        backgroundLayer.path = path.cgPath
         
-        layer.insertSublayer(backgroundLayer, atIndex: 0)
+        layer.insertSublayer(backgroundLayer, at: 0)
     }
     
-    public override func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView? {
-        if let touchArea = touchArea where CGRectContainsPoint(touchArea, point) {
+    open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if let touchArea = touchArea , touchArea.contains(point) {
             return nil
         }
-        return super.hitTest(point, withEvent: event)
+        return super.hitTest(point, with: event)
     }
 }
 
@@ -137,13 +137,13 @@ public class TutorialView: UIView {
 // MARK: - Tutorial Item
 // ===========================
 
-public class TutorialItem: NSObject {
-    public let tutorialID: String
+open class TutorialItem: NSObject {
+    open let tutorialID: String
     
-    public var prevAction: (() -> Void)?
-    public var nextAction: (() -> Void)?
+    open var prevAction: (() -> Void)?
+    open var nextAction: (() -> Void)?
     
-    public let view: TutorialView
+    open let view: TutorialView
     
     public init(view: TutorialView, identifier: String) {
         assert(!identifier.isEmpty, "Tutorial view must have a valid identifier.")
@@ -155,25 +155,25 @@ public class TutorialItem: NSObject {
     
     public init(nibName: String, identifier: String) {
         assert(!identifier.isEmpty, "Tutorial view must have a valid identifier.")
-        self.view = NSBundle.mainBundle().loadNibNamed(nibName, owner: nil, options: nil)[0] as! TutorialView
+        self.view = Bundle.main.loadNibNamed(nibName, owner: nil, options: nil)?[0] as! TutorialView
         self.tutorialID = identifier
         super.init()
         prepareView()
     }
     
-    private func prepareView() {
+    fileprivate func prepareView() {
         view.item = self
         
         if let prevButton = view.prevButton {
-            prevButton.addTarget(self, action: #selector(prevButtonAction), forControlEvents: .TouchUpInside)
+            prevButton.addTarget(self, action: #selector(prevButtonAction), for: .touchUpInside)
         }
         
         if let nextButton = view.nextButton {
-            nextButton.addTarget(self, action: #selector(nextButtonAction), forControlEvents: .TouchUpInside)
+            nextButton.addTarget(self, action: #selector(nextButtonAction), for: .touchUpInside)
         }
     }
     
-    @objc private func prevButtonAction(sender: AnyObject) {
+    @objc fileprivate func prevButtonAction(_ sender: AnyObject) {
         if let prevAction = prevAction {
             prevAction()
         } else {
@@ -181,7 +181,7 @@ public class TutorialItem: NSObject {
         }
     }
     
-    @objc private func nextButtonAction(sender: AnyObject) {
+    @objc fileprivate func nextButtonAction(_ sender: AnyObject) {
         if let nextAction = nextAction {
             nextAction()
         } else {
@@ -194,37 +194,37 @@ public class TutorialItem: NSObject {
 // MARK: - Tutorial Manager
 // ==============================
 
-public class TutorialManager: NSObject {
-    public static func sharedManager() -> TutorialManager { return _sharedManager }
-    private static let _sharedManager = TutorialManager()
+open class TutorialManager: NSObject {
+    open static func sharedManager() -> TutorialManager { return _sharedManager }
+    fileprivate static let _sharedManager = TutorialManager()
     
-    public var shouldShowTutorial = true
-    public var items = [String: TutorialItem]()
-    public private(set) var currentItem: TutorialItem?
+    open var shouldShowTutorial = true
+    open var items = [String: TutorialItem]()
+    open fileprivate(set) var currentItem: TutorialItem?
     
-    private let blankItem: TutorialItem
-    private let transparentItem: TutorialItem
+    fileprivate let blankItem: TutorialItem
+    fileprivate let transparentItem: TutorialItem
     
-    private override init() {
-        let blankView = TutorialView(frame: UIScreen.mainScreen().bounds)
+    fileprivate override init() {
+        let blankView = TutorialView(frame: UIScreen.main.bounds)
         blankItem = TutorialItem(view: blankView, identifier: "blankItem")
         
-        let transparentView = TutorialView(frame: UIScreen.mainScreen().bounds)
-        transparentView.backgroundColor = UIColor.clearColor()
+        let transparentView = TutorialView(frame: UIScreen.main.bounds)
+        transparentView.backgroundColor = UIColor.clear
         transparentItem = TutorialItem(view: transparentView, identifier: "transparentItem")
     }
     
-    public func registerItem(item: TutorialItem) {
+    open func registerItem(_ item: TutorialItem) {
         items[item.tutorialID] = item
     }
     
-    public func showTutorialWithIdentifier(tutorialID: String) {
+    open func showTutorialWithIdentifier(_ tutorialID: String) {
         if !shouldShowTutorial {
             print("TutorialManager.shouldShowTutorial = false\nTutorial Manager will return without showing tutorial.")
             return
         }
         
-        if let window = UIApplication.sharedApplication().delegate?.window {
+        if let window = UIApplication.shared.delegate?.window {
             if let item = items[tutorialID] {
                 blankItem.view.removeFromSuperview()
                 transparentItem.view.removeFromSuperview()
@@ -239,25 +239,25 @@ public class TutorialManager: NSObject {
         }
     }
     
-    public func showBlankItem() {
-        UIApplication.sharedApplication().delegate!.window!!.addSubview(blankItem.view)
-        UIApplication.sharedApplication().delegate!.window!!.setNeedsLayout()
+    open func showBlankItem() {
+        UIApplication.shared.delegate!.window!!.addSubview(blankItem.view)
+        UIApplication.shared.delegate!.window!!.setNeedsLayout()
         
         currentItem?.nextAction?()
         currentItem?.view.removeFromSuperview()
         currentItem = nil
     }
     
-    public func showTransparentItem() {
-        UIApplication.sharedApplication().delegate!.window!!.addSubview(transparentItem.view)
-        UIApplication.sharedApplication().delegate!.window!!.setNeedsLayout()
+    open func showTransparentItem() {
+        UIApplication.shared.delegate!.window!!.addSubview(transparentItem.view)
+        UIApplication.shared.delegate!.window!!.setNeedsLayout()
         
         currentItem?.nextAction?()
         currentItem?.view.removeFromSuperview()
         currentItem = nil
     }
     
-    public func hideTutorial() {
+    open func hideTutorial() {
         currentItem?.nextAction?()
         currentItem?.view.removeFromSuperview()
         currentItem = nil

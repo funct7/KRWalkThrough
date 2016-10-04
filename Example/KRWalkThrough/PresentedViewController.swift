@@ -11,7 +11,7 @@ import KRWalkThrough
 
 class PresentedViewController: UIViewController, UITextFieldDelegate {
     var isFirstLogin: Bool {
-        return NSUserDefaults.standardUserDefaults().boolForKey(UserDefaultsKey.isFirstLogin)
+        return UserDefaults.standard.bool(forKey: UserDefaultsKey.isFirstLogin)
     }
     @IBOutlet weak var textFieldName: UITextField!
     @IBOutlet weak var textFieldEmail: UITextField!
@@ -24,7 +24,7 @@ class PresentedViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         if isFirstLogin {
@@ -39,7 +39,7 @@ class PresentedViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: - Text field
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if (textField.text ?? "").isEmpty { return false }
         
         if textField === textFieldName {
@@ -73,7 +73,7 @@ class PresentedViewController: UIViewController, UITextFieldDelegate {
         let doneX: CGFloat = Screen.bounds.width - 85.0
         let doneY: CGFloat = -10.0
         
-        let doneRect = CGRectMake(doneX, doneY, 100.0, 100.0)
+        let doneRect = CGRect(x: doneX, y: doneY, width: 100.0, height: 100.0)
         let view5 = TutorialView(frame: Screen.bounds)
         view5.makeAvailable(doneRect, cornerRadius: 50.0)
         let item5 = TutorialItem(view: view5, identifier: "5")

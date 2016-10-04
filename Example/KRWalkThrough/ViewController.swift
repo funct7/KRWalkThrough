@@ -11,7 +11,7 @@ import KRWalkThrough
 
 class ViewController: UIViewController {
     var isFirstLogin: Bool {
-        return NSUserDefaults.standardUserDefaults().boolForKey(UserDefaultsKey.isFirstLogin)
+        return UserDefaults.standard.bool(forKey: UserDefaultsKey.isFirstLogin)
     }
     
     @IBOutlet weak var buttonAdd: UIButton!
@@ -24,7 +24,7 @@ class ViewController: UIViewController {
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         if isFirstLogin {
@@ -41,7 +41,7 @@ class ViewController: UIViewController {
     // MARK: - Target action
     
     @IBAction func resetAction(sender: AnyObject) {
-        NSUserDefaults.standardUserDefaults().setBool(true, forKey: UserDefaultsKey.isFirstLogin)
+        UserDefaults.standard.set(true, forKey: UserDefaultsKey.isFirstLogin)
         TutorialManager.sharedManager().shouldShowTutorial = true
         setUpWalkThrough()
         TutorialManager.sharedManager().showTutorialWithIdentifier("1")
@@ -56,17 +56,17 @@ class ViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.text = "Background was tapped.\nThis message shouldn't\nshow during tutorial."
-        label.textAlignment = .Center
-        label.textColor = UIColor.redColor()
+        label.textAlignment = .center
+        label.textColor = UIColor.red
         
         self.view.addSubview(label)
         self.view.addConstraints([
-            NSLayoutConstraint(item: label, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: label, attribute: .CenterY, relatedBy: .Equal, toItem: self.view, attribute: .CenterY, multiplier: 1.5, constant: 0.0)
+            NSLayoutConstraint(item: label, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: label, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 1.5, constant: 0.0)
             ])
         
-        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(Double(NSEC_PER_SEC) * 1.5))
-        dispatch_after(time, dispatch_get_main_queue()) {
+        let time: DispatchTime = DispatchTime.now() + Double(Int64(Double(NSEC_PER_SEC) * 1.5)) / Double(NSEC_PER_SEC)
+        DispatchQueue.main.asyncAfter(deadline: time) { 
             label.removeFromSuperview()
         }
     }
@@ -88,15 +88,15 @@ class ViewController: UIViewController {
         }
         
         let quitButton = item1.view.viewWithTag(-1) as! UIButton
-        quitButton.addTarget(self, action: #selector(finishTutorial), forControlEvents: .TouchUpInside)
+        quitButton.addTarget(self, action: #selector(finishTutorial), for: .touchUpInside)
         
         let view2 = TutorialView(frame: Screen.bounds)
         view2.makeAvailable(buttonAdd, radiusInset: 20.0)
         
-        let prevButton2 = UIButton(type: .System)
-        prevButton2.frame = CGRectMake(0.0, 22.0, 100.0, 44.0)
-        prevButton2.setTitle("Prev", forState: .Normal)
-        prevButton2.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        let prevButton2 = UIButton(type: .system)
+        prevButton2.frame = CGRect(x: 0.0, y: 22.0, width: 100.0, height: 44.0)
+        prevButton2.setTitle("Prev", for: .normal)
+        prevButton2.setTitleColor(UIColor.white, for: .normal)
         
         view2.addSubview(prevButton2)
         view2.prevButton = prevButton2
@@ -104,12 +104,12 @@ class ViewController: UIViewController {
         let label2 = UILabel()
         label2.translatesAutoresizingMaskIntoConstraints = false
         label2.text = "Tap \"+\" button to add."
-        label2.textColor = UIColor.whiteColor()
+        label2.textColor = UIColor.white
         
         view2.addSubview(label2)
         view2.addConstraints([
-            NSLayoutConstraint(item: label2, attribute: .CenterX, relatedBy: .Equal, toItem: view2, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: label2, attribute: .CenterY, relatedBy: .Equal, toItem: view2, attribute: .CenterY, multiplier: 1.5, constant: 0.0)
+            NSLayoutConstraint(item: label2, attribute: .centerX, relatedBy: .equal, toItem: view2, attribute: .centerX, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: label2, attribute: .centerY, relatedBy: .equal, toItem: view2, attribute: .centerY, multiplier: 1.5, constant: 0.0)
             ])
         
         let item2 = TutorialItem(view: view2, identifier: "2")
@@ -122,7 +122,7 @@ class ViewController: UIViewController {
     }
     
     @objc private func finishTutorial() {
-        NSUserDefaults.standardUserDefaults().setBool(false, forKey: UserDefaultsKey.isFirstLogin)
+        UserDefaults.standard.set(false, forKey: UserDefaultsKey.isFirstLogin)
         TutorialManager.sharedManager().shouldShowTutorial = false
         TutorialManager.sharedManager().hideTutorial()
 
@@ -130,7 +130,7 @@ class ViewController: UIViewController {
     
     // MARK: - Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if isFirstLogin {
             TutorialManager.sharedManager().showTransparentItem()
         }

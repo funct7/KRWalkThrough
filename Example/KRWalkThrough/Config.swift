@@ -13,5 +13,5 @@ struct UserDefaultsKey {
 }
 
 var Screen: UIScreen {
-    return UIScreen.mainScreen()
+    return UIScreen.main
 }
