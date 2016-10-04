@@ -40,18 +40,18 @@ class ViewController: UIViewController {
     
     // MARK: - Target action
     
-    @IBAction func resetAction(sender: AnyObject) {
+    @IBAction func resetAction(_ sender: AnyObject) {
         UserDefaults.standard.set(true, forKey: UserDefaultsKey.isFirstLogin)
         TutorialManager.sharedManager().shouldShowTutorial = true
         setUpWalkThrough()
         TutorialManager.sharedManager().showTutorialWithIdentifier("1")
     }
     
-    @IBAction func dismissViewController(segue: UIStoryboardSegue) {
+    @IBAction func dismissViewController(_ segue: UIStoryboardSegue) {
         finishTutorial()
     }
     
-    @IBAction func backgroundAction(sender: AnyObject) {
+    @IBAction func backgroundAction(_ sender: AnyObject) {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0

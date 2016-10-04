@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="IeF-fj-J8h">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="IeF-fj-J8h">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -31,33 +32,31 @@
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS" customClass="UIControl">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b6k-Kf-DEJ">
-                                <rect key="frame" x="275" y="275" width="50" height="50"/>
-                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="b6k-Kf-DEJ" secondAttribute="height" multiplier="1:1" id="OEW-pC-pQ7"/>
                                     <constraint firstAttribute="width" constant="50" id="eGc-jH-KLp"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="30"/>
                                 <state key="normal" title="+">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <segue destination="66H-Kb-TQZ" kind="presentation" id="dp0-Ck-XBO"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aJ1-YF-GDY">
-                                <rect key="frame" x="253" y="523" width="94" height="30"/>
                                 <state key="normal" title="Reset Tutorial"/>
                                 <connections>
-                                    <action selector="resetAction:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="g7j-97-qnq"/>
+                                    <action selector="resetAction:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="bMY-Xi-Mew"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="b6k-Kf-DEJ" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="KiP-JQ-Bka"/>
                             <constraint firstItem="b6k-Kf-DEJ" firstAttribute="centerY" secondItem="kh9-bI-dsS" secondAttribute="centerY" id="Y7X-Wu-34N"/>
@@ -65,7 +64,7 @@
                             <constraint firstItem="aJ1-YF-GDY" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="nwS-Gx-OIT"/>
                         </constraints>
                         <connections>
-                            <action selector="backgroundAction:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="f3o-3q-mMs"/>
+                            <action selector="backgroundAction:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="kDg-Ry-wLy"/>
                         </connections>
                     </view>
                     <navigationItem key="navigationItem" id="dS3-xG-CYA"/>
@@ -102,20 +101,21 @@
                         <viewControllerLayoutGuide type="bottom" id="8Z6-j3-Udo"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="VRb-P3-Zsj">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MFe-ir-veM">
-                                <rect key="frame" x="195" y="266" width="210" height="68"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JFV-yM-IDh">
-                                        <rect key="frame" x="0.0" y="0.0" width="45" height="30"/>
+                                        <frame key="frameInset" width="45" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="90c-sX-BGd">
-                                        <rect key="frame" x="60" y="0.0" width="150" height="30"/>
+                                        <frame key="frameInset" minX="60" width="150" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="next"/>
                                         <connections>
@@ -123,13 +123,15 @@
                                         </connections>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IPf-Zo-VMn">
-                                        <rect key="frame" x="0.0" y="38" width="45" height="30"/>
+                                        <frame key="frameInset" minY="38" width="45" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Jl5-G3-m83">
-                                        <rect key="frame" x="60" y="38" width="150" height="30"/>
+                                        <frame key="frameInset" minX="60" minY="38" width="150" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="done"/>
                                         <connections>
@@ -137,14 +139,14 @@
                                         </connections>
                                     </textField>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="68" id="Sh7-1z-EhO"/>
                                     <constraint firstAttribute="width" constant="210" id="xoq-ni-aRn"/>
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="MFe-ir-veM" firstAttribute="centerX" secondItem="VRb-P3-Zsj" secondAttribute="centerX" id="Ufn-Uq-sbg"/>
                             <constraint firstItem="MFe-ir-veM" firstAttribute="centerY" secondItem="VRb-P3-Zsj" secondAttribute="centerY" id="qQG-Rc-kth"/>
@@ -153,7 +155,7 @@
                     <navigationItem key="navigationItem" id="Dpe-oc-tzw">
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="OFS-9Q-hhC">
                             <connections>
-                                <segue destination="ewY-gi-czC" kind="unwind" unwindAction="dismissViewController:" id="zXE-eV-JeT"/>
+                                <segue destination="ewY-gi-czC" kind="unwind" unwindAction="dismissViewController:" id="fkw-1x-1CU"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
