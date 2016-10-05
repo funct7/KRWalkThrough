@@ -59,13 +59,13 @@ class PresentedViewController: UIViewController, UITextFieldDelegate {
     
     private func setUpWalkThrough() {
         let view3 = TutorialView(frame: Screen.bounds)
-        view3.makeAvailable(textFieldName, insets: UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0), cornerRadius: 6.0)
+        view3.makeAvailable(view: textFieldName, insets: UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0), cornerRadius: 6.0)
         
         let item3 = TutorialItem(view: view3, identifier: "3")
         TutorialManager.sharedManager().registerItem(item3)
         
         let view4 = TutorialView(frame: Screen.bounds)
-        view4.makeAvailable(textFieldEmail, insets: UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0), cornerRadius: 6.0)
+        view4.makeAvailable(view: textFieldEmail, insets: UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0), cornerRadius: 6.0)
         
         let item4 = TutorialItem(view: view4, identifier: "4")
         TutorialManager.sharedManager().registerItem(item4)
@@ -75,7 +75,7 @@ class PresentedViewController: UIViewController, UITextFieldDelegate {
         
         let doneRect = CGRect(x: doneX, y: doneY, width: 100.0, height: 100.0)
         let view5 = TutorialView(frame: Screen.bounds)
-        view5.makeAvailable(doneRect, cornerRadius: 50.0)
+        view5.makeAvailable(rect: doneRect, insets: UIEdgeInsets.zero, cornerRadius: 50.0)
         let item5 = TutorialItem(view: view5, identifier: "5")
         
         TutorialManager.sharedManager().registerItem(item5)

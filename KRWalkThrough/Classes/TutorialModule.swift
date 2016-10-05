@@ -13,6 +13,18 @@ import UIKit
 // ===========================
 
 open class TutorialView: UIView {
+    private enum TouchArea {
+        case view(view: UIView)
+        case rect(rect: CGRect)
+    }
+    
+    private enum MaskArea {
+        case rect(insets: UIEdgeInsets, cornerRadius: CGFloat)
+        case radiusInset(radiusInset: CGFloat)
+    }
+    
+    private typealias FocusType = (touch: TouchArea, mask: MaskArea)
+    
     open weak var item: TutorialItem!
     
     @IBOutlet open weak var prevButton: UIButton?
@@ -25,46 +37,16 @@ open class TutorialView: UIView {
             if let color = newValue { fillColor = color }
         }
     }
-    open override var frame: CGRect {
-        didSet {
-            if frame != oldValue {
-                if var touchArea = touchArea {
-                    let hScale = frame.width / oldValue.width
-                    let vScale = frame.height / oldValue.height
-                        
-                    touchArea.origin.x *= hScale
-                    touchArea.origin.y *= vScale
-                    self.touchArea = touchArea
-                    
-                    if var maskRect = maskRect {
-                        maskRect.origin.x *= hScale
-                        maskRect.origin.y *= vScale
-                        
-                        self.maskRect = maskRect
-                    }
-                }
-            }
-        }
-    }
     
-    //: The area that receives touch as defined by the view upon initialization
-    //: touchArea and nextButton should be mutally exclusive
-    fileprivate var fillColor = UIColor(white: 0.0, alpha: 0.5)
-    fileprivate var touchArea: CGRect?
-    fileprivate var maskRect: CGRect?
-    fileprivate var cornerRadius: CGFloat?
+    private var fillColor = UIColor(white: 0.0, alpha: 0.5)
+    private var focus: FocusType?
     
-    open func makeAvailable(_ view: UIView) {
-        let frame = convert(view.frame, from: view.superview)
-        makeAvailable(frame, maskRect: frame, cornerRadius: 0.0)
+    open func makeAvailable(view: UIView) {
+        makeAvailable(view: view, insets: UIEdgeInsets.zero, cornerRadius: 0.0)
     }
     
     //: Makes a circle-shaped available area with the given radius inset
-    open func makeAvailable(_ view: UIView, radiusInset: CGFloat) {
-        if !view.translatesAutoresizingMaskIntoConstraints {
-            view.superview?.layoutIfNeeded()
-        }
-        
+    open func makeAvailable(view: UIView, radiusInset: CGFloat) {
         let rect = convert(view.frame, from: view.superview)
         let center = convert(view.center, from: view.superview)
         let rawDiameter = sqrt(pow(view.frame.width, 2) + pow(view.frame.height, 2))
@@ -73,32 +55,23 @@ open class TutorialView: UIView {
         let x = center.x - diameter / 2.0
         let y = center.y - diameter / 2.0
         
-        makeAvailable(rect, maskRect: CGRect(x: x, y: y, width: diameter, height: diameter), cornerRadius: diameter/2.0)
+        focus = (TouchArea.view(view: view), MaskArea.radiusInset(radiusInset: radiusInset))
     }
     
-    open func makeAvailable(_ view: UIView, insets: UIEdgeInsets, cornerRadius: CGFloat) {
-        if !view.translatesAutoresizingMaskIntoConstraints {
-            view.superview?.layoutIfNeeded()
-        }
-        
-        let rect = convert(view.frame, from: view.superview)
-        var maskRect = rect
-        maskRect.origin.x -= insets.left
-        maskRect.origin.y -= insets.top
-        maskRect.size.width += insets.left + insets.right
-        maskRect.size.height += insets.top + insets.bottom
-        
-        makeAvailable(rect, maskRect: maskRect, cornerRadius: cornerRadius)
+    open func makeAvailable(view: UIView, insets: UIEdgeInsets, cornerRadius: CGFloat) {
+        focus = (TouchArea.view(view: view), MaskArea.rect(insets: insets, cornerRadius: cornerRadius))
     }
     
-    open func makeAvailable(_ rect: CGRect, cornerRadius: CGFloat) {
-        makeAvailable(rect, maskRect: rect, cornerRadius: cornerRadius)
+    open func makeAvailable(rect: CGRect) {
+        makeAvailable(rect: rect, insets: UIEdgeInsets.zero, cornerRadius: 0.0)
     }
     
-    open func makeAvailable(_ rect: CGRect, maskRect: CGRect, cornerRadius: CGFloat) {
-        touchArea = rect
-        self.maskRect = maskRect
-        self.cornerRadius = cornerRadius
+    open func makeAvailable(rect: CGRect, insets: UIEdgeInsets, cornerRadius: CGFloat) {
+        focus = (TouchArea.rect(rect: rect), MaskArea.rect(insets: insets, cornerRadius: cornerRadius))
+    }
+    
+    open func makeAvailable(rect: CGRect, radiusInset: CGFloat) {
+        focus = (TouchArea.rect(rect: rect), MaskArea.radiusInset(radiusInset: radiusInset))
     }
     
     open override func layoutSubviews() {
@@ -111,8 +84,37 @@ open class TutorialView: UIView {
         }
         
         let path = UIBezierPath(rect: bounds)
-        if let maskRect = maskRect, let cornerRadius = cornerRadius {
-            path.append(UIBezierPath(roundedRect: maskRect, cornerRadius: cornerRadius))
+
+        if let focus = focus {
+            var rect: CGRect = {
+                switch focus.touch {
+                case .rect(rect: let rect):
+                    return rect
+                case .view(view: let view):
+                    return self.convert(view.frame, from: view.superview)
+                }
+            }()
+            
+            switch focus.mask {
+            case .rect(insets: let insets, cornerRadius: let cornerRadius):
+                rect.origin.x -= insets.left
+                rect.origin.y -= insets.top
+                rect.size.width += insets.left + insets.right
+                rect.size.height += insets.top + insets.bottom
+                
+                path.append(UIBezierPath(roundedRect: rect, cornerRadius: cornerRadius))
+            case .radiusInset(radiusInset: let radiusInset):
+                let center = CGPoint(x: rect.midX, y: rect.midY)
+                let rawDiameter = sqrt(pow(rect.width, 2) + pow(rect.height, 2))
+                let diameter = round(rawDiameter) + radiusInset * 2.0
+                let radius = round(diameter / 2.0)
+                
+                let x = center.x - radius
+                let y = center.y - radius
+                
+                let circleRect = CGRect(x: x, y: y, width: diameter, height: diameter)
+                path.append(UIBezierPath(roundedRect: circleRect, cornerRadius: radius))
+            }
         }
         
         let backgroundLayer = CAShapeLayer()
@@ -126,9 +128,18 @@ open class TutorialView: UIView {
     }
     
     open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        if let touchArea = touchArea , touchArea.contains(point) {
-            return nil
+        if let focus = focus {
+            let bypassRect: CGRect = {
+                switch focus.touch {
+                case .rect(rect: let rect):
+                    return rect
+                case .view(view: let view):
+                    return self.convert(view.frame, from: view.superview)
+                }
+            }()
+            if bypassRect.contains(point) { return nil }
         }
+        
         return super.hitTest(point, with: event)
     }
 }

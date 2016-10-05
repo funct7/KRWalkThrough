@@ -91,7 +91,7 @@ class ViewController: UIViewController {
         quitButton.addTarget(self, action: #selector(finishTutorial), for: .touchUpInside)
         
         let view2 = TutorialView(frame: Screen.bounds)
-        view2.makeAvailable(buttonAdd, radiusInset: 20.0)
+        view2.makeAvailable(view: buttonAdd, radiusInset: 20.0)
         
         let prevButton2 = UIButton(type: .system)
         prevButton2.frame = CGRect(x: 0.0, y: 22.0, width: 100.0, height: 44.0)
