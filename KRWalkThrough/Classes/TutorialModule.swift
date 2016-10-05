@@ -45,21 +45,13 @@ open class TutorialView: UIView {
         makeAvailable(view: view, insets: UIEdgeInsets.zero, cornerRadius: 0.0)
     }
     
-    //: Makes a circle-shaped available area with the given radius inset
-    open func makeAvailable(view: UIView, radiusInset: CGFloat) {
-        let rect = convert(view.frame, from: view.superview)
-        let center = convert(view.center, from: view.superview)
-        let rawDiameter = sqrt(pow(view.frame.width, 2) + pow(view.frame.height, 2))
-        let diameter = round(rawDiameter) + radiusInset * 2.0
-        
-        let x = center.x - diameter / 2.0
-        let y = center.y - diameter / 2.0
-        
-        focus = (TouchArea.view(view: view), MaskArea.radiusInset(radiusInset: radiusInset))
-    }
-    
     open func makeAvailable(view: UIView, insets: UIEdgeInsets, cornerRadius: CGFloat) {
         focus = (TouchArea.view(view: view), MaskArea.rect(insets: insets, cornerRadius: cornerRadius))
+    }
+    
+    //: Makes a circle-shaped available area with the given radius inset
+    open func makeAvailable(view: UIView, radiusInset: CGFloat) {
+        focus = (TouchArea.view(view: view), MaskArea.radiusInset(radiusInset: radiusInset))
     }
     
     open func makeAvailable(rect: CGRect) {
@@ -142,6 +134,14 @@ open class TutorialView: UIView {
         
         return super.hitTest(point, with: event)
     }
+    
+    deinit {
+        if case TouchArea.view(view: let view)? = focus?.touch {
+            print("TutorialView deinitialized. Touch view: \(view)")
+        } else {
+            print("TutorialView deinited")
+        }
+    }
 }
 
 // ===========================
@@ -215,8 +215,7 @@ open class TutorialItem: NSObject {
 // ==============================
 
 open class TutorialManager: NSObject {
-    open static func sharedManager() -> TutorialManager { return _sharedManager }
-    fileprivate static let _sharedManager = TutorialManager()
+    open static let shared = TutorialManager()
     
     open var shouldShowTutorial = true
     open var items = [String: TutorialItem]()
@@ -236,6 +235,16 @@ open class TutorialManager: NSObject {
     
     open func register(item: TutorialItem) {
         items[item.identifier] = item
+    }
+    
+    open func deregister(item: TutorialItem) {
+        items[item.identifier] = nil
+    }
+    
+    open func deregisterAllItems() {
+        for key in items.keys {
+            items[key] = nil
+        }
     }
     
     open func performNextAction() {
@@ -266,26 +275,26 @@ open class TutorialManager: NSObject {
         currentItem = item
     }
     
-    open func showBlankItem(performNextAction: Bool = false) {
+    open func showBlankItem(withAction action: Bool = false) {
         UIApplication.shared.delegate!.window!!.addSubview(blankItem.view)
         UIApplication.shared.delegate!.window!!.setNeedsLayout()
         
-        if performNextAction { currentItem?.nextAction?() }
+        if action { currentItem?.nextAction?() }
         currentItem?.view.removeFromSuperview()
         currentItem = nil
     }
     
-    open func showTransparentItem(performNextAction: Bool = false) {
+    open func showTransparentItem(withAction action: Bool = false) {
         UIApplication.shared.delegate!.window!!.addSubview(transparentItem.view)
         UIApplication.shared.delegate!.window!!.setNeedsLayout()
         
-        if performNextAction { currentItem?.nextAction?() }
+        if action { currentItem?.nextAction?() }
         currentItem?.view.removeFromSuperview()
         currentItem = nil
     }
     
-    open func hideTutorial(performNextAction: Bool = false) {
-        if performNextAction { currentItem?.nextAction?() }
+    open func hideTutorial(withAction action: Bool = false) {
+        if action { currentItem?.nextAction?() }
         currentItem?.view.removeFromSuperview()
         currentItem = nil
     }

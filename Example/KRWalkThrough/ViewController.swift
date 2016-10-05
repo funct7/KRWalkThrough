@@ -28,7 +28,7 @@ class ViewController: UIViewController {
         super.viewWillAppear(animated)
         
         if isFirstLogin {
-            TutorialManager.sharedManager().showTutorialWithIdentifier("1")
+            TutorialManager.shared.showTutorial(withIdentifier: "1")
         }
     }
 
@@ -42,9 +42,9 @@ class ViewController: UIViewController {
     
     @IBAction func resetAction(_ sender: AnyObject) {
         UserDefaults.standard.set(true, forKey: UserDefaultsKey.isFirstLogin)
-        TutorialManager.sharedManager().shouldShowTutorial = true
+        TutorialManager.shared.shouldShowTutorial = true
         setUpWalkThrough()
-        TutorialManager.sharedManager().showTutorialWithIdentifier("1")
+        TutorialManager.shared.showTutorial(withIdentifier: "1")
     }
     
     @IBAction func dismissViewController(_ segue: UIStoryboardSegue) {
@@ -84,7 +84,7 @@ class ViewController: UIViewController {
         let item1 = TutorialItem(nibName: "Welcome", identifier: "1")
         item1.view.frame = Screen.bounds
         item1.nextAction = {
-            TutorialManager.sharedManager().showTutorialWithIdentifier("2")
+            TutorialManager.shared.showTutorial(withIdentifier: "2")
         }
         
         let quitButton = item1.view.viewWithTag(-1) as! UIButton
@@ -114,17 +114,18 @@ class ViewController: UIViewController {
         
         let item2 = TutorialItem(view: view2, identifier: "2")
         item2.prevAction = {
-            TutorialManager.sharedManager().showTutorialWithIdentifier("1")
+            TutorialManager.shared.showTutorial(withIdentifier: "1")
         }
         
-        TutorialManager.sharedManager().registerItem(item1)
-        TutorialManager.sharedManager().registerItem(item2)
+        TutorialManager.shared.register(item: item1)
+        TutorialManager.shared.register(item: item2)
     }
     
     @objc private func finishTutorial() {
         UserDefaults.standard.set(false, forKey: UserDefaultsKey.isFirstLogin)
-        TutorialManager.sharedManager().shouldShowTutorial = false
-        TutorialManager.sharedManager().hideTutorial()
+        TutorialManager.shared.shouldShowTutorial = false
+        TutorialManager.shared.hideTutorial()
+        TutorialManager.shared.deregisterAllItems()
 
     }
     
@@ -132,7 +133,7 @@ class ViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if isFirstLogin {
-            TutorialManager.sharedManager().showTransparentItem()
+            TutorialManager.shared.showTransparentItem()
         }
     }
 }

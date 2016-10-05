@@ -28,7 +28,7 @@ class PresentedViewController: UIViewController, UITextFieldDelegate {
         super.viewDidAppear(animated)
         
         if isFirstLogin {
-            TutorialManager.sharedManager().showTutorialWithIdentifier("3")
+            TutorialManager.shared.showTutorial(withIdentifier: "3")
         }
     }
 
@@ -45,11 +45,11 @@ class PresentedViewController: UIViewController, UITextFieldDelegate {
         if textField === textFieldName {
             textFieldEmail.becomeFirstResponder()
             
-            if isFirstLogin { TutorialManager.sharedManager().showTutorialWithIdentifier("4") }
+            if isFirstLogin { TutorialManager.shared.showTutorial(withIdentifier: "4") }
         } else {
             textFieldEmail.resignFirstResponder()
             
-            if isFirstLogin { TutorialManager.sharedManager().showTutorialWithIdentifier("5") }
+            if isFirstLogin { TutorialManager.shared.showTutorial(withIdentifier: "5") }
         }
         
         return true
@@ -62,13 +62,13 @@ class PresentedViewController: UIViewController, UITextFieldDelegate {
         view3.makeAvailable(view: textFieldName, insets: UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0), cornerRadius: 6.0)
         
         let item3 = TutorialItem(view: view3, identifier: "3")
-        TutorialManager.sharedManager().registerItem(item3)
+        TutorialManager.shared.register(item: item3)
         
         let view4 = TutorialView(frame: Screen.bounds)
         view4.makeAvailable(view: textFieldEmail, insets: UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0), cornerRadius: 6.0)
         
         let item4 = TutorialItem(view: view4, identifier: "4")
-        TutorialManager.sharedManager().registerItem(item4)
+        TutorialManager.shared.register(item: item4)
         
         let doneX: CGFloat = Screen.bounds.width - 85.0
         let doneY: CGFloat = -10.0
@@ -78,7 +78,7 @@ class PresentedViewController: UIViewController, UITextFieldDelegate {
         view5.makeAvailable(rect: doneRect, insets: UIEdgeInsets.zero, cornerRadius: 50.0)
         let item5 = TutorialItem(view: view5, identifier: "5")
         
-        TutorialManager.sharedManager().registerItem(item5)
+        TutorialManager.shared.register(item: item5)
     }
     
     /*
@@ -90,5 +90,5 @@ class PresentedViewController: UIViewController, UITextFieldDelegate {
         // Pass the selected object to the new view controller.
     }
     */
-
+    
 }
