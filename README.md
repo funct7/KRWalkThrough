@@ -7,7 +7,7 @@
 
 ## Note on Swift 3 & iOS 10
 
-For those who are using Swift 2.2-, there is a separate `swift2.2` branch. Or you can choose to checkout `0.9.6`.
+For those who are using Swift 2.2-, there is a separate `swift2.2` branch. Or you can choose to checkout `0.9.7`.
 
 For those who have migrated to Swift 3, please read the following.
 
