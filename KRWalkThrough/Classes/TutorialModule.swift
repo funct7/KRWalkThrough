@@ -29,6 +29,10 @@ open class TutorialView: UIView {
     
     @IBOutlet open weak var prevButton: UIButton?
     @IBOutlet open weak var nextButton: UIButton?
+    
+    private(set) var availableAction: (() -> Void)? = nil
+    private(set) var unavailableAction: (() -> Void)? = nil
+    
     open override var backgroundColor: UIColor? {
         get {
             return fillColor
@@ -64,6 +68,14 @@ open class TutorialView: UIView {
     
     open func makeAvailable(rect: CGRect, radiusInset: CGFloat) {
         focus = (TouchArea.rect(rect: rect), MaskArea.radiusInset(radiusInset: radiusInset))
+    }
+    
+    open func setActionForAvailableArea(_ action: @escaping () -> Void) {
+        availableAction = action
+    }
+    
+    open func setActionForUnavailableArea(_ action: @escaping () -> Void) {
+        unavailableAction = action
     }
     
     open override func layoutSubviews() {
@@ -119,6 +131,11 @@ open class TutorialView: UIView {
         layer.insertSublayer(backgroundLayer, at: 0)
     }
     
+    open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        unavailableAction?()
+    }
+    
     open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         if let focus = focus {
             let bypassRect: CGRect = {
@@ -129,7 +146,10 @@ open class TutorialView: UIView {
                     return self.convert(view.frame, from: view.superview)
                 }
             }()
-            if bypassRect.contains(point) { return nil }
+            if bypassRect.contains(point) {
+                availableAction?()
+                return nil
+            }
         }
         
         return super.hitTest(point, with: event)
@@ -193,7 +213,7 @@ open class TutorialItem: NSObject {
         }
     }
     
-    @objc fileprivate func prevButtonAction(_ sender: AnyObject) {
+    @objc fileprivate func prevButtonAction(_ sender: Any) {
         if let prevAction = prevAction {
             prevAction()
         } else {
@@ -201,7 +221,7 @@ open class TutorialItem: NSObject {
         }
     }
     
-    @objc fileprivate func nextButtonAction(_ sender: AnyObject) {
+    @objc fileprivate func nextButtonAction(_ sender: Any) {
         if let nextAction = nextAction {
             nextAction()
         } else {
