@@ -9,12 +9,13 @@ import UIKit
 
 open class TutorialItem: NSObject {
     open let identifier: String
-    
+
     open var prevAction: (() -> Void)?
     open var nextAction: (() -> Void)?
-    
+
     open let view: TutorialView
-    
+
+    @objc
     public init(view: TutorialView, identifier: String) {
         assert(!identifier.isEmpty, "Tutorial view must have a valid identifier.")
         self.view = view
@@ -22,7 +23,8 @@ open class TutorialItem: NSObject {
         super.init()
         prepareView()
     }
-    
+
+    @objc
     public init(nibName: String, identifier: String) {
         assert(!identifier.isEmpty, "Tutorial view must have a valid identifier.")
         self.view = Bundle.main.loadNibNamed(nibName, owner: nil, options: nil)?[0] as! TutorialView
@@ -30,7 +32,8 @@ open class TutorialItem: NSObject {
         super.init()
         prepareView()
     }
-    
+
+    @objc
     public init(storyboardName: String, storyboardID: String, identifier: String) {
         assert(!identifier.isEmpty, "Tutorial view must have a valid identifier.")
         let vc = UIStoryboard(name: storyboardName, bundle: nil).instantiateViewController(withIdentifier: storyboardID)

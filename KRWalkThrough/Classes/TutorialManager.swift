@@ -10,6 +10,7 @@ import UIKit
 
 open class TutorialManager: NSObject {
     
+    @objc
     open static let shared = TutorialManager()
     
     open var shouldShowTutorial = true
@@ -28,24 +29,29 @@ open class TutorialManager: NSObject {
         transparentItem = TutorialItem(view: transparentView, identifier: "transparentItem")
     }
     
+    @objc
     open func register(item: TutorialItem) {
         items[item.identifier] = item
     }
-    
+
+    @objc
     open func deregister(item: TutorialItem) {
         items[item.identifier] = nil
     }
-    
+
+    @objc
     open func deregisterAllItems() {
         for key in items.keys {
             items[key] = nil
         }
     }
-    
+
+    @objc
     open func performNextAction() {
         currentItem?.nextAction?()
     }
-    
+
+    @objc
     open func showTutorial(withIdentifier identifier: String) {
         guard shouldShowTutorial else {
             print("TutorialManager.shouldShowTutorial = false\nTutorial Manager will return without showing tutorial.")
@@ -69,7 +75,8 @@ open class TutorialManager: NSObject {
         if currentItem?.view.superview != nil { currentItem?.view.removeFromSuperview() }
         currentItem = item
     }
-    
+
+    @objc
     open func showBlankItem(withAction action: Bool = false) {
         UIApplication.shared.delegate!.window!!.addSubview(blankItem.view)
         UIApplication.shared.delegate!.window!!.setNeedsLayout()
@@ -78,7 +85,8 @@ open class TutorialManager: NSObject {
         currentItem?.view.removeFromSuperview()
         currentItem = nil
     }
-    
+
+    @objc
     open func showTransparentItem(withAction action: Bool = false) {
         UIApplication.shared.delegate!.window!!.addSubview(transparentItem.view)
         UIApplication.shared.delegate!.window!!.setNeedsLayout()
@@ -87,7 +95,8 @@ open class TutorialManager: NSObject {
         currentItem?.view.removeFromSuperview()
         currentItem = nil
     }
-    
+
+    @objc
     open func hideTutorial(withAction action: Bool = false) {
         if action { currentItem?.nextAction?() }
         currentItem?.view.removeFromSuperview()
