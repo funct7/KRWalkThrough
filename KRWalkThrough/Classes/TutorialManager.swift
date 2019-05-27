@@ -11,7 +11,7 @@ import UIKit
 open class TutorialManager: NSObject {
     
     @objc
-    open static let shared = TutorialManager()
+    public static let shared = TutorialManager()
     
     open var shouldShowTutorial = true
     open private(set) var items = [String: TutorialItem]()
