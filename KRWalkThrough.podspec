@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'KRWalkThrough'
-  s.version          = '0.11.0.1'
+  s.version          = '0.12.0'
   s.summary          = 'Easily show tutorial anywhere in your project with the minimal amount of code to obstruct the regular app flow.'
 
 # This description is used to generate tags and improve search results.
@@ -36,6 +36,7 @@ your regular views, you can control the next steps of the walk through easily.
   s.frameworks = 'UIKit'
   s.ios.deployment_target = '8.0'
   s.source_files = 'KRWalkThrough/Classes/**/*'
+  s.swift_version = '4.0'
   
   # s.resource_bundles = {
   #   'KRWalkThrough' => ['KRWalkThrough/Assets/*.png']

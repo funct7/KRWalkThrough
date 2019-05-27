@@ -50,7 +50,8 @@ open class TutorialView: UIView {
     
     private var fillColor = UIColor(white: 0.0, alpha: 0.5)
     private var actionItemList = [ActionItem]()
-    
+
+    @objc
     open func makeAvailable(view: UIView,
                             action: (() -> Void)? = nil)
     {
@@ -59,7 +60,8 @@ open class TutorialView: UIView {
                       cornerRadius: 0.0,
                       action: action)
     }
-    
+
+    @objc
     open func makeAvailable(view: UIView,
                             insets: UIEdgeInsets,
                             cornerRadius: CGFloat,
@@ -73,6 +75,7 @@ open class TutorialView: UIView {
     }
     
     //: Makes a circle-shaped available area with the given radius inset
+    @objc
     open func makeAvailable(view: UIView,
                             radiusInset: CGFloat,
                             action: (() -> Void)? = nil)
@@ -82,7 +85,8 @@ open class TutorialView: UIView {
                           action: action)
         actionItemList.append(focus)
     }
-    
+
+    @objc
     open func makeAvailable(rect: CGRect,
                             action: (() -> Void)? = nil)
     {
@@ -91,7 +95,8 @@ open class TutorialView: UIView {
                       cornerRadius: 0.0,
                       action: action)
     }
-    
+
+    @objc
     open func makeAvailable(rect: CGRect,
                             insets: UIEdgeInsets,
                             cornerRadius: CGFloat,
@@ -103,7 +108,8 @@ open class TutorialView: UIView {
                           action: action)
         actionItemList.append(focus)
     }
-    
+
+    @objc
     open func makeAvailable(rect: CGRect,
                             radiusInset: CGFloat,
                             action: (() -> Void)? = nil)
@@ -113,7 +119,8 @@ open class TutorialView: UIView {
                           action: action)
         actionItemList.append(focus)
     }
-    
+
+    @objc
     open func makeUnavailable(rect: CGRect,
                               action: (() -> Void)? = nil) {
         let block = Block(rect: rect,
